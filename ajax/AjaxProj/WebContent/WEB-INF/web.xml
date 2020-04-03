@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<servlet>
+		<servlet-name>AjaxServlet</servlet-name>
+		<servlet-class>com.gen.ajax.AjaxServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AjaxServlet</servlet-name>
+		<url-pattern>/AjaxServlet</url-pattern>
+	</servlet-mapping>
+
+<!-- 	<servlet>
+		<servlet-name>ForwardServlet</servlet-name>
+		<servlet-class>com.gen.ajax.ForwardServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ForwardServlet</servlet-name>
+		<url-pattern>/ForwardServlet</url-pattern>
+	</servlet-mapping> -->
+</web-app>

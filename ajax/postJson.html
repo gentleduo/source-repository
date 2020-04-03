@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	var req;
+	function inference() {
+		//获取表单提交的内容  
+		var idField = document.getElementById("userName");
+		//alert(JSON.stringify({name:"John Rambo", time:"2pm"}))
+		//创建一个XMLHttpRequest对象req  
+		if (window.XMLHttpRequest) {
+			//IE7, Firefox, Opera支持  
+			req = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			//IE5,IE6支持  
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		/*GET方式*/
+		//访问validate.do这个servlet，同时把获取的表单内容idField加入url字符串，以便传递给validate.do  
+		//var url = "AjaxServlet?id=" + escape(idField.value);
+		/* 
+		 open(String method,String url, boolean )函数有3个参数 
+		 method参数指定向servlet发送请求所使用的方法，有GET,POST等 
+		 boolean值指定是否异步，true为使用，false为不使用。 
+		 我们使用异步才能体会到Ajax强大的异步功能。 
+		 */
+		//req.open("GET", url, true);
+		//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+		//req.onreadystatechange = callback;
+		//send函数发送请求  GET方式
+		//req.send(null);
+		/*POST方式*/
+		var people = { "name": "cxh", "sex": "man" };
+		//alert('adsfadfadf');
+		//var url = "https://67.216.218.190:5000/to_speak";
+		var url = "http://server01:9999/inference";
+		req.open("POST", url, true);
+		//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+		req.onreadystatechange = callback;
+		//注意,使用POST方法提交,在请求发送之前,必须要加上如下一行:
+		req.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+		//send函数发送请求  POST方式
+		//req.send("id=" + idField.value);
+		//req.send(people.toJSONString());
+		
+        //var packJson = {"name":"zhang", "password":"123"};
+		//req.send(JSON.stringify({name:"John Rambo", time:"2pm"}));
+		
+		//var josnObj = ['1','2','3']
+		//req.send(JSON.stringify(josnObj));
+		
+		req.send('{"question":"question2"}');
+	}
+
+	function reload() {
+		if (window.XMLHttpRequest) {
+			//IE7, Firefox, Opera支持  
+			req = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			//IE5,IE6支持  
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		/*POST方式*/
+		var people = { "name": "cxh", "sex": "man" };
+		//alert('adsfadfadf');
+		var url = "http://server01:9999/reload_modle";
+		req.open("POST", url, true);
+		//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+		req.onreadystatechange = callback;
+		//注意,使用POST方法提交,在请求发送之前,必须要加上如下一行:
+		req.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+		//send函数发送请求  POST方式
+		var josnObj = {"reload_id":"0"};
+		req.send(JSON.stringify(josnObj));
+	}
+	
+	function training() {
+		if (window.XMLHttpRequest) {
+			//IE7, Firefox, Opera支持  
+			req = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			//IE5,IE6支持  
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		/*POST方式*/
+		//alert('adsfadfadf');
+		var url = "http://server01:9999/training";
+		req.open("POST", url, true);
+		//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+		req.onreadystatechange = callback;
+		//注意,使用POST方法提交,在请求发送之前,必须要加上如下一行:
+		req.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+		//send函数发送请求  POST方式
+		var josnObj = {key:"key",value:"value"}
+		req.send(JSON.stringify(josnObj));
+	}
+	function filetrans() {
+		if (window.XMLHttpRequest) {
+			//IE7, Firefox, Opera支持  
+			req = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			//IE5,IE6支持  
+			req = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		/*POST方式*/
+		//alert('adsfadfadf');
+		var url = "http://server01:9999/filetransclient";
+		req.open("POST", url, true);
+		//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+		req.onreadystatechange = callback;
+		//注意,使用POST方法提交,在请求发送之前,必须要加上如下一行:
+		req.setRequestHeader("Content-Type",
+				"application/x-www-form-urlencoded");
+		//send函数发送请求  POST方式
+		var josnObj = {key:"key",value:"value"}
+		req.send(JSON.stringify(josnObj));
+	}
+	function callback() {
+	    //alert('11111111');
+		//alert(req.readyState + ":" + req.status);
+		if (req.readyState == 4 && req.status == 200) {
+			var resTxt = req.responseText;
+			show(resTxt);
+		} 
+	}
+
+	function show(str) {
+	    alert(str);
+		//var jsonObj = eval("(" + str + ")");
+		//var show = jsonObj.result;
+		//var show = jsonObj[1];
+		//document.getElementById("info").innerHTML = show;
+		/* 		if (str == "OK") {
+			 var show = "<font color='green'>恭喜！！用户名可用！</font>";
+			 document.getElementById("info").innerHTML = show;
+			 } else if (str == "NO") {
+			 var show = "<font color='red'>对不起，用户名不可用！！请重新输入！</font>";
+			 document.getElementById("info").innerHTML = show;
+			 } */
+	}
+	function showJson() {
+
+
+		var jsonStr  = "{\"userId\":\"001\"}";  // json对象字符串
+		var jsonArryStr = "[{\"userId\":\"001\"},{\"userId\":\"002\"}]"; // json数组字符串
+		var jsonObj  = JSON.parse(jsonStr);     // 字符串转为json对象
+		var jsonArry = JSON.parse(jsonArryStr); // 字符串转为json数组
+		var jsonStr  = JSON.stringify(jsonObj); // json对象转为字符串
+		var jsonArryStr=JSON.stringify(jsonArry);// json数组转为字符串
+		alert(jsonStr);
+		alert(jsonArryStr);
+		alert(jsonObj.userId);
+		//alert(jsonArry[0]['userId']);
+		alert(jsonArry[0].userId);
+	}
+</script>
+</head>
+<body>
+<!--onblur="validate()"-->
+	<form action="" method="get" name="form">
+		<br> 输入用户名： <input type="text" size="10" maxlength="8"
+			id="userName" name="name" > <span
+			id="info"></span> <br> 输入商品名： <input type="text" size="10"
+			maxlength="8">
+		<br>
+		<!--<input type="button" value="json" onclick="showJson()"/>-->
+		<input type="button" value="inference" onclick="inference()"/><br>
+		<input type="button" value="reload" onclick="reload()"/><br>
+		<input type="button" value="training" onclick="training()"/><br>
+		<input type="button" value="filetrans" onclick="filetrans()"/>
+	</form>
+</body>
+</html>

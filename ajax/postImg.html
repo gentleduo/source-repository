@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">		
+	function base64encode(str) {
+		var _str = CryptoJS.enc.Utf8.parse(str);
+		var _base64 = CryptoJS.enc.Base64.stringify(_str);
+		return _base64;
+	}
+	function uploadFile() {
+	
+		var input = document.getElementById("myImage"); 
+		var newBase64;
+		var reader = new FileReader();  
+		reader.readAsDataURL(input.files[0])  
+		reader.onload = function (evt)  
+		{  
+			var base64 = reader.result;
+			//document.getElementById("imageABase64").value = base64;
+			//base64 = base64encode(base64);
+			//alert(base64.length);
+			//base64 = base64.replace('data:image/jpeg;base64,','')
+			base64 = base64.substr(base64.indexOf("base64") + 7);
+			//alert(base64.length);
+			// 重点来了 ajax在传输过程中 加号会变成空格 base64里是有加号的我不幸掉进了这个坑……  
+			// 把+替换成编码 %2B是加号的编码
+			//base64 = encodeURI(base64).replace(/\+/g, "%2B");
+            //alert(base64);
+			
+			//然后就可以按照上面那个方法发给服务器端了
+			//创建一个XMLHttpRequest对象req  
+			if (window.XMLHttpRequest) {
+				//IE7, Firefox, Opera支持  
+				req = new XMLHttpRequest();
+			} else if (window.ActiveXObject) {
+				//IE5,IE6支持  
+				req = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			/*POST方式*/
+			var postdata = { "imgbin": base64 };
+			var url = "http://127.0.0.1:9999/upload";
+			req.open("POST", url, true);
+			//onreadystatechange属性存有处理服务器响应的函数,有5个取值分别代表不同状态  
+			req.onreadystatechange = callback;
+			//注意,使用POST方法提交,在请求发送之前,必须要加上如下一行:
+			req.setRequestHeader("Content-Type",
+					"application/x-www-form-urlencoded");
+			//send函数发送请求  POST方式
+			req.send(JSON.stringify(postdata));
+		}  
+	}
+
+	function callback() {
+	    //alert('11111111');
+		//alert(req.readyState + ":" + req.status);
+		if (req.readyState == 4 && req.status == 200) {
+			var check = req.responseText;
+			//alert('22222222');
+			show(check);
+		} 
+	}
+
+	function show(str) {
+		var jsonObj = eval("(" + str + ")");
+		var show = jsonObj.result;
+		alert(show);
+		//document.getElementById("info").innerHTML = show;
+		/* 		if (str == "OK") {
+			 var show = "<font color='green'>恭喜！！用户名可用！</font>";
+			 document.getElementById("info").innerHTML = show;
+			 } else if (str == "NO") {
+			 var show = "<font color='red'>对不起，用户名不可用！！请重新输入！</font>";
+			 document.getElementById("info").innerHTML = show;
+			 } */
+	}
+	function showJson() {
+
+
+		var jsonStr  = "{\"userId\":\"001\"}";  // json对象字符串
+		var jsonArryStr = "[{\"userId\":\"001\"},{\"userId\":\"002\"}]"; // json数组字符串
+		var jsonObj  = JSON.parse(jsonStr);     // 字符串转为json对象
+		var jsonArry = JSON.parse(jsonArryStr); // 字符串转为json数组
+		var jsonStr  = JSON.stringify(jsonObj); // json对象转为字符串
+		var jsonArryStr=JSON.stringify(jsonArry);// json数组转为字符串
+		alert(jsonStr);
+		alert(jsonArryStr);
+		alert(jsonObj.userId);
+		//alert(jsonArry[0]['userId']);
+		alert(jsonArry[0].userId);
+	}
+</script>
+</head>
+<body>
+	<form action="" method="get" name="form">
+	    <input type="file" id="myImage" name="myImage" onchange="uploadFile()"/>
+		<input id="imageABase64" name="imageABase64" type="hidden"
+									value="" />
+	</form>
+</body>
+</html>
