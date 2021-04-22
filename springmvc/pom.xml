@@ -21,7 +21,7 @@
 		<log4j-web.version>2.13.1</log4j-web.version>
 		<jsp-api.version>2.2.1</jsp-api.version>
 		<jstl.version>1.2</jstl.version>
-		<mybatis.version>3.5.2</mybatis.version>
+		<mybatis.version>3.5.6</mybatis.version>
 		<mybatis-spring.version>2.0.2</mybatis-spring.version>
 		<jackson.version>2.10.3</jackson.version>
 		<maven-compiler.version>3.3</maven-compiler.version>
